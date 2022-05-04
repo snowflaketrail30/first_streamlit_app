@@ -1,2 +1,2 @@
 import streamlit
-streamlit.tile('This is my first streamlit application')
+streamlit.title('This is my first streamlit application')
