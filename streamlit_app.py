@@ -30,6 +30,6 @@ my_cnx = sf.connect(**streamlit.secrets["snowflake"])
 my_cur = my_cnx.cursor()
 my_cur.execute("SELECT CURRENT_USER(), CURRENT_ACCOUNT(), CURRENT_REGION()")
 my_data_row = my_cur.fetchone()
-streamlist.text("Hello from snowflake::")
-streamlist.text(my_data_row)
+streamlit.text("Hello from snowflake:")
+streamlit.text(my_data_row)
 
