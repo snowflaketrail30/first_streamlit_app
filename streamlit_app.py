@@ -26,10 +26,10 @@ fruityvice_response = requests.get('https://fruityvice.com/api/fruit/'+fruit_cho
 fruityvice_normalized = py.json_normalize(fruityvice_response.json())
 streamlit.dataframe(fruityvice_normalized)
 
-my_cnx = sf.connect(**streamlit.secrets["snowflake"])
+my_cnx = sf.connect(**streamlit.secrets["snowflake:
 my_cur = my_cnx.cursor()
-my_cur.execute("SELECT CURRENT_USER(), CURRENT_ACCOUNT(), CURRENT_REGION()")
+my_cur.execute("select * from fruit_load_list")
 my_data_row = my_cur.fetchone()
-streamlit.text("Hello from snowflake:")
+streamlit.text("The fruit load list contains")
 streamlit.text(my_data_row)
 
