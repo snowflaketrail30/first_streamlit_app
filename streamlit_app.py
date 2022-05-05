@@ -42,10 +42,10 @@ except URLError as e:
   st.error()
 
 #Add a button to load list  
-if st.button('Get Fruit Load List:'):
+st.header("The fruit load list contains:")
+if st.button('Get Fruit Load List'):
   my_cnx = sf.connect(**st.secrets["snowflake"])
   my_data_rows = get_fruit_load_list()
-  st.header("The fruit load list contains:")
   st.dataframe(my_data_rows)
 
 fruit_add = st.text_input('What fruit would you like add?')
