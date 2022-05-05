@@ -1,7 +1,7 @@
 import streamlit
 import pandas as py
 import requests
-import snowflake.connector
+import snowflake.connector as sf
 
 streamlit.title('My Mom\'s New Healthy Diner')
 streamlit.header('Breakfast Favorites')
@@ -25,3 +25,11 @@ fruityvice_response = requests.get('https://fruityvice.com/api/fruit/'+fruit_cho
 #beautify reponse
 fruityvice_normalized = py.json_normalize(fruityvice_response.json())
 streamlit.dataframe(fruityvice_normalized)
+
+my_cnx = sf.connect(**.streamlit.secrets["snowflake"])
+my_cur = my_cnx.cursor()
+my_cur.execute("SELECT CURRENT_USER(), CURRENT_ACCOUNT(), CURRENT_REGION()")
+my_data_row = my_cur.fetchone()
+streamlist.text("Hello from snowflake::")
+streamlist.text(my_data_row)
+
