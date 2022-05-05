@@ -15,6 +15,11 @@ def get_fruit_load_list():
     my_cur.execute("select * from fruit_load_list")
     return my_cur.fetchall()
   
+def insert_row_snowflake(new_fruit):
+  with my_cnx.cursor() as my_cur:
+    my_cur.execute("insert into fruit_load_list values('"+new_fruit+"')")
+    return "Thanks for adding " + new_fruit  
+  
 st.title('My Mom\'s New Healthy Diner')
 st.header('Breakfast Favorites')
 st.text('🥣 Omega 3 & Blueberry Oatmeal')
@@ -42,12 +47,15 @@ except URLError as e:
   st.error()
 
 #Add a button to load list  
-st.header("The fruit load list contains:")
-if st.button('Get Fruit Load List'):
+st.header("View Our Fruit List - Add Your Favorites!")
+if st.button('Get Fruit List'):
   my_cnx = sf.connect(**st.secrets["snowflake"])
   my_data_rows = get_fruit_load_list()
   st.dataframe(my_data_rows)
 
-fruit_add = st.text_input('What fruit would you like add?')
-st.text('Thanks for adding ' + fruit_add)
+add_my_fruit = st.text_input('What fruit would you like add?')
+if st.button('Add a Fruit to the List'):
+  my_cnx = sf.connect(**st.secrets["snowflake"])
+  back_from_function = insert_row_snowflake(add_my_fruit)
+  st.text(back_from_function)
 
