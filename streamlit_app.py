@@ -2,7 +2,14 @@ import streamlit
 import pandas as py
 import requests
 import snowflake.connector as sf
+from urllib.error import URLError
 
+def get_fruityvice_data(this_fruit_choice):
+  fruityvice_response = requests.get('https://fruityvice.com/api/fruit/'+fruit_choice)
+    #beautify reponse
+  fruityvice_normalized = py.json_normalize(fruityvice_response.json())
+  return fruityvice_normalized
+  
 streamlit.title('My Mom\'s New Healthy Diner')
 streamlit.header('Breakfast Favorites')
 streamlit.text('🥣 Omega 3 & Blueberry Oatmeal')
@@ -19,12 +26,17 @@ fruits_show = my_fruit_list.loc[fruits_selected]
 # display the table on tha page
 streamlit.dataframe(fruits_show)
 streamlit.header('Fruityvice Fruit Advice!')
-fruit_choice = streamlit.text_input('What fruit would you like information about?', 'Kiwi')
-streamlit.write('The user entered', fruit_choice)
-fruityvice_response = requests.get('https://fruityvice.com/api/fruit/'+fruit_choice)
-#beautify reponse
-fruityvice_normalized = py.json_normalize(fruityvice_response.json())
-streamlit.dataframe(fruityvice_normalized)
+try:
+  fruit_choice = streamlit.text_input('What fruit would you like information about?', 'Kiwi')
+  if not fruit_choice:
+    streamlit.error('Please select a fruit to get information.')
+  else:
+    fruityvice_normalized = get_fruityvice_data(fruit_choice)
+    streamlit.dataframe(fruityvice_normalized)
+except URLError as e:
+  streamlit.error()
+  
+
 
 my_cnx = sf.connect(**streamlit.secrets["snowflake"])
 my_cur = my_cnx.cursor()
